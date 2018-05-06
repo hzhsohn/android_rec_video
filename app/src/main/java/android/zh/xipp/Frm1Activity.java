@@ -75,6 +75,17 @@ public class Frm1Activity extends AppCompatActivity {
                     Date day=new Date();
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     ((TextView)findViewById(R.id.textView)).setText(df.format(day));
+
+                    //
+                    if(SerialMagr.sendSerialData(new String("abcdef").getBytes()) >0) {
+                        Toast.makeText(getApplicationContext(), "serial send ok!",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(), "serial send fail..",
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
@@ -120,9 +131,7 @@ public class Frm1Activity extends AppCompatActivity {
     //
     public void btn1_click(View v)
     {
-        SerialMagr.sendSerialData(new String("abcdef").getBytes());
-        Toast.makeText(getApplicationContext(), "serial send abcdef",
-                Toast.LENGTH_SHORT).show();
+
     }
     //
     public void btn2_click(View v)

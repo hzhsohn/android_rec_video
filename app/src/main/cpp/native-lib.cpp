@@ -53,17 +53,6 @@ static speed_t getBaudrate(jint baudrate)
     }
 }
 
-
-extern "C" JNIEXPORT jstring
-
-JNICALL
-Java_android_zh_xipp_MainActivity_stringFromJNI(
-        JNIEnv *env,
-        jobject /* this */) {
-    std::string hello = "Hello from C++";
-    return env->NewStringUTF(hello.c_str());
-}
-
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_android_zh_serial_SerialPort_open(JNIEnv *env, jclass type, jstring path, jint baudrate)
@@ -87,7 +76,7 @@ Java_android_zh_serial_SerialPort_open(JNIEnv *env, jclass type, jstring path, j
         jboolean iscopy;
         const char *path_utf = env->GetStringUTFChars( path, &iscopy);
         LOGD("Opening serial port %s", path_utf);
-        fd = open(path_utf, O_RDWR | O_DIRECT | O_SYNC);
+        fd = open(path_utf, O_RDWR|O_NOCTTY|O_NDELAY);
         LOGD("open() fd = %d", fd);
         env->ReleaseStringUTFChars( path, path_utf);
         if (fd == -1)

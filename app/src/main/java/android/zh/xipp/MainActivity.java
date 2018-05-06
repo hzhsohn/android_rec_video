@@ -3,6 +3,7 @@ package android.zh.xipp;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        MainActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         //启用服务
        // Intent intent = new Intent(MainActivity.this,ProcessMonitorService.class);
@@ -45,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
         //做其它界面初始化
         getPermissions();
 
-        //串口
+        /*
+        //打开UART1串口
         if(SerialMagr.initSerialPort("/dev/ttyS1",9600))
         {
             new Thread(SerialMagr.recvThread).start();
@@ -55,14 +58,8 @@ public class MainActivity extends AppCompatActivity {
         {
             Toast.makeText(this, "串口打开失败", Toast.LENGTH_LONG).show();
         }
+        */
     }
-
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
-    public native String stringFromJNI();
-
 
     /**
      * 获取权限
