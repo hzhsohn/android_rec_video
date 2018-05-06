@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "android.zh.xipp"
-        minSdkVersion 14
+        minSdkVersion 19
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -26,6 +26,8 @@ android {
             path "CMakeLists.txt"
         }
     }
+    productFlavors {
+    }
 }
 
 dependencies {
@@ -39,4 +41,5 @@ dependencies {
     implementation files('libs/gson-2.7.jar')
     implementation files('libs/libmcunet.jar')
     implementation project(path: ':camera')
+    implementation project(path: ':usbserial')
 }

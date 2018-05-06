@@ -1,7 +1,6 @@
-package android.zh.serial;
+package android.zh.uart_serial;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;

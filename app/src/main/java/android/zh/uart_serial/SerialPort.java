@@ -1,4 +1,4 @@
-package android.zh.serial;
+package android.zh.uart_serial;
 
 import java.io.File;
 import java.io.FileDescriptor;

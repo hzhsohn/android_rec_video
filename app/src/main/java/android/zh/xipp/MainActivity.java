@@ -5,24 +5,12 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.zh.serial.SerialMagr;
-import android.zh.serial.SerialPort;
-import android.zh.service.ProcessMonitorService;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -58,6 +46,18 @@ public class MainActivity extends AppCompatActivity {
         {
             Toast.makeText(this, "串口打开失败", Toast.LENGTH_LONG).show();
         }
+
+        //串口发送数据
+        if(SerialMagr.sendSerialData(new String("abcdef").getBytes()) >0) {
+             Toast.makeText(getApplicationContext(), "serial send ok!",
+                Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+              Toast.makeText(getApplicationContext(), "serial send fail..",
+                Toast.LENGTH_SHORT).show();
+        }
+
         */
     }
 
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                     ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager
                             .PERMISSION_GRANTED &&
                     ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager
-                            .PERMISSION_GRANTED) {
+                            .PERMISSION_GRANTED ) {
                 startActivityForResult(new Intent(MainActivity.this, Frm1Activity.class), 100);
             } else {
                 //不具有获取权限，需要进行权限申请

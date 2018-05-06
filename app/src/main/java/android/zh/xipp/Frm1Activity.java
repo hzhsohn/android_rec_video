@@ -1,6 +1,5 @@
 package android.zh.xipp;
 
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,18 +11,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.zh.serial.SerialMagr;
-import android.zh.serial.SerialPort;
 
 import com.cjt2325.cameralibrary.JCameraView;
 import com.cjt2325.cameralibrary.listener.ErrorListener;
-import com.cjt2325.cameralibrary.util.DeviceUtil;
-import com.cjt2325.cameralibrary.util.FileUtil;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
@@ -76,16 +68,7 @@ public class Frm1Activity extends AppCompatActivity {
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     ((TextView)findViewById(R.id.textView)).setText(df.format(day));
 
-                    //
-                    if(SerialMagr.sendSerialData(new String("abcdef").getBytes()) >0) {
-                        Toast.makeText(getApplicationContext(), "serial send ok!",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
-                        Toast.makeText(getApplicationContext(), "serial send fail..",
-                                Toast.LENGTH_SHORT).show();
-                    }
+
                 }
             });
         }
