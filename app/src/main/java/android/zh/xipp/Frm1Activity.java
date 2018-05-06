@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.zh.serial.SerialMagr;
+import android.zh.serial.SerialPort;
 
 import com.cjt2325.cameralibrary.JCameraView;
 import com.cjt2325.cameralibrary.listener.ErrorListener;
@@ -19,6 +21,9 @@ import com.cjt2325.cameralibrary.util.DeviceUtil;
 import com.cjt2325.cameralibrary.util.FileUtil;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
@@ -106,4 +111,28 @@ public class Frm1Activity extends AppCompatActivity {
         super.onPause();
         jCameraView.onPause();
     }
+
+    /*
+     *
+     * 串口
+     *
+     * */
+    //
+    public void btn1_click(View v)
+    {
+        SerialMagr.sendSerialData(new String("abcdef").getBytes());
+        Toast.makeText(getApplicationContext(), "serial send abcdef",
+                Toast.LENGTH_SHORT).show();
+    }
+    //
+    public void btn2_click(View v)
+    {
+
+    }
+    //
+    public void btn3_click(View v)
+    {
+
+    }
+
 }

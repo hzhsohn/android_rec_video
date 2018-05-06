@@ -11,9 +11,18 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.zh.serial.SerialMagr;
+import android.zh.serial.SerialPort;
 import android.zh.service.ProcessMonitorService;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +44,17 @@ public class MainActivity extends AppCompatActivity {
 
         //做其它界面初始化
         getPermissions();
+
+        //串口
+        if(SerialMagr.initSerialPort("/dev/ttyS1",9600))
+        {
+            new Thread(SerialMagr.recvThread).start();
+            Toast.makeText(this, "串口打开成功", Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            Toast.makeText(this, "串口打开失败", Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
@@ -107,13 +127,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
 }
