@@ -126,6 +126,7 @@ public class CameraInterface implements Camera.PreviewCallback {
             }
             float[] values = event.values;
             angle = AngleUtil.getSensorAngle(values[0], values[1]);
+
             rotationAnimation();
         }
 

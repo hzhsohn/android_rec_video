@@ -78,8 +78,6 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     private VideoView mVideoView;
     private CaptureLayout mCaptureLayout;
     private FoucsView mFoucsView;
-    private MediaPlayer mMediaPlayer;
-
     private int layout_width;
     private float screenProp = 0f;
 

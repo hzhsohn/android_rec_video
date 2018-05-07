@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,10 +66,20 @@ public class Frm1Activity extends AppCompatActivity {
                 public void run() {
                     //已在主线程中，可以更新UI
                     Date day=new Date();
-                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                    //SimpleDateFormat df2 = new SimpleDateFormat("HH:mm:ss");
+                    SimpleDateFormat df2 = new SimpleDateFormat("HH:mm");
                     ((TextView)findViewById(R.id.textView)).setText(df.format(day));
-
-
+                    ((TextView)findViewById(R.id.textView4)).setText(df2.format(day));
+                    //显示小心跳
+                    ImageView imgv=(ImageView)findViewById(R.id.imageView);
+                    if(imgv.getVisibility()==View.VISIBLE)
+                    {
+                        imgv.setVisibility(View.INVISIBLE);
+                    }
+                    else {
+                        imgv.setVisibility(View.VISIBLE);
+                    }
                 }
             });
         }

@@ -55,7 +55,8 @@ static speed_t getBaudrate(jint baudrate)
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_android_zh_serial_SerialPort_open(JNIEnv *env, jclass type, jstring path, jint baudrate)
+Java_android_zh_uart_1serial_SerialPort_open(JNIEnv *env, jclass type, jstring path,
+                                             jint baudrate)
 {
     int fd;
     speed_t speed;
@@ -127,7 +128,7 @@ Java_android_zh_serial_SerialPort_open(JNIEnv *env, jclass type, jstring path, j
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_android_zh_serial_SerialPort_close(JNIEnv *env, jobject thiz) {
+Java_android_zh_uart_1serial_SerialPort_close(JNIEnv *env, jobject thiz) {
 
     jclass SerialPortClass = env->GetObjectClass( thiz);
     jclass FileDescriptorClass = env->FindClass( "java/io/FileDescriptor");
