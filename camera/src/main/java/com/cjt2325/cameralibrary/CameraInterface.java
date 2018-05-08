@@ -96,10 +96,10 @@ public class CameraInterface implements Camera.PreviewCallback {
     private int nowScaleRate = 0;
     private int recordScleRate = 0;
 
+    CameraOpenOverCallback mCallback=null;
+
     //视频质量
     private int mediaQuality = JCameraView.MEDIA_QUALITY_MIDDLE;
-    private SensorManager sm = null;
-
     //获取CameraInterface单例
     public static synchronized CameraInterface getInstance() {
         if (mCameraInterface == null)
@@ -263,7 +263,7 @@ public class CameraInterface implements Camera.PreviewCallback {
     /*每一帧的图像*/
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
-
+        mCallback.cameraPervFrameBegin();
     }
 
     public void setFlashMode(String flashMode) {
@@ -277,6 +277,7 @@ public class CameraInterface implements Camera.PreviewCallback {
 
     public interface CameraOpenOverCallback {
         void cameraHasOpened();
+        void cameraPervFrameBegin();
     }
 
     private CameraInterface() {
@@ -299,8 +300,11 @@ public class CameraInterface implements Camera.PreviewCallback {
         if (mCamera == null) {
             openCamera(SELECTED_CAMERA);
         }
+        mCallback=callback;
         callback.cameraHasOpened();
     }
+
+
 
     private void setFlashModel() {
         mParams = mCamera.getParameters();
@@ -396,6 +400,7 @@ public class CameraInterface implements Camera.PreviewCallback {
                 mCamera.startPreview();//启动浏览
                 isPreviewing = true;
                 Log.i(TAG, "=== Start Preview ===");
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -733,22 +738,6 @@ public class CameraInterface implements Camera.PreviewCallback {
     public interface FocusCallback {
         void focusSuccess();
 
-    }
-
-
-    void registerSensorManager(Context context) {
-        if (sm == null) {
-            sm = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        }
-        sm.registerListener(sensorEventListener, sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager
-                .SENSOR_DELAY_NORMAL);
-    }
-
-    void unregisterSensorManager(Context context) {
-        if (sm == null) {
-            sm = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        }
-        sm.unregisterListener(sensorEventListener);
     }
 
     void isPreview(boolean res) {

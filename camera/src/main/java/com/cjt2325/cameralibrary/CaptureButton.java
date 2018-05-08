@@ -35,6 +35,8 @@ public class CaptureButton extends View {
     private int outside_color = 0xEEDCDCDC;             //外圆背景色
     private int inside_color = 0xFFFFFFFF;              //内圆背景色
 
+    private int RecordTime = 10 * 1000;              //默认最长录制时间为10s
+
 
     private float event_Y;  //Touch_Event_Down时候记录的Y值
 
@@ -88,7 +90,7 @@ public class CaptureButton extends View {
         state = STATE_IDLE;                //初始化为空闲状态
         button_state = BUTTON_STATE_BOTH;  //初始化按钮为可录制可拍照
         LogUtil.i("CaptureButtom start");
-        duration = 20 * 1000;              //默认最长录制时间为20s
+        duration = RecordTime;              //默认最长录制时间
         LogUtil.i("CaptureButtom end");
 
         center_X = (button_size + outside_add_size * 2) / 2;
@@ -96,9 +98,6 @@ public class CaptureButton extends View {
 
 
         timer = new RecordCountDownTimer(duration, duration / 360);    //录制定时器
-
-        //
-        Toast.makeText(mContext,"开始录制视频", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -108,23 +107,23 @@ public class CaptureButton extends View {
         setMeasuredDimension(button_size + outside_add_size * 2, button_size + outside_add_size * 2);
     }
 
-    //录制结束
-    private void recordEnd() {
-        if (captureLisenter != null) {
-                captureLisenter.recordEnd(recorded_time);  //回调录制结束
-        }
-    }
-
     //开始录像
     public  void buttonStartRecVideo()
     {
-        Toast.makeText(mContext,"开始录制视频", Toast.LENGTH_SHORT).show();
 
         if (captureLisenter != null)
             captureLisenter.recordStart();
 
         state = STATE_RECORDERING;
         timer.start();
+    }
+
+    //停止录像
+    public  void buttonStopRecVideo()
+    {
+        if (captureLisenter != null) {
+            captureLisenter.recordEnd(recorded_time);  //回调录制结束
+        }
     }
 
     //更新进度条
@@ -149,7 +148,7 @@ public class CaptureButton extends View {
         public void onFinish() {
 
             updateProgress(0);
-            recordEnd();
+            buttonStopRecVideo();
 
             //已在主线程中，可以更新UI
             buttonStartRecVideo();

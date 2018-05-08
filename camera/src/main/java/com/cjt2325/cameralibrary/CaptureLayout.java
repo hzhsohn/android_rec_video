@@ -78,6 +78,10 @@ public class CaptureLayout extends FrameLayout {
     {
         btn_capture.buttonStartRecVideo();
     }
+    public void StopRecordVideo()
+    {
+        btn_capture.buttonStopRecVideo();
+    }
 
     private void initView() {
         setWillNotDraw(false);

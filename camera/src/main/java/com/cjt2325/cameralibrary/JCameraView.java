@@ -121,11 +121,12 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
         mFoucsView = (FoucsView) view.findViewById(R.id.fouce_view);
         mVideoView.getHolder().addCallback(this);
 
-        //录像
+        //录像事件回调
         mCaptureLayout.setCaptureLisenter(new CaptureListener() {
             @Override
             public void recordStart() {
                 machine.record(mVideoView.getHolder().getSurface(), screenProp);
+                Toast.makeText(mContext,"开始录制视频", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -135,6 +136,11 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
                 machine.confirm();
                 //
                 Toast.makeText(mContext,"视频录制完成", Toast.LENGTH_SHORT).show();
+                /*
+                 * 删除超出数量的视频文件
+                 * */
+
+                deleteOldVideoFile();
             }
 
             @Override
@@ -167,11 +173,19 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
         CameraInterface.getInstance().doStartPreview(mVideoView.getHolder(), screenProp);
     }
 
+    /*
+    每一帧开始都录像
+    * */
+    @Override
+    public void cameraPervFrameBegin() {
+        mCaptureLayout.StartRecordVideo();
+    }
+
+
     //生命周期onResume
     public void onResume() {
         LogUtil.i("JCameraView onResume");
         resetState(TYPE_DEFAULT); //重置状态
-        CameraInterface.getInstance().registerSensorManager(mContext);
         machine.start(mVideoView.getHolder(), screenProp);
     }
 
@@ -180,7 +194,6 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
         LogUtil.i("JCameraView onPause");
         resetState(TYPE_VIDEO);
         CameraInterface.getInstance().isPreview(false);
-        CameraInterface.getInstance().unregisterSensorManager(mContext);
     }
 
     //SurfaceView生命周期
@@ -202,27 +215,8 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         LogUtil.i("JCameraView SurfaceDestroyed");
+        mCaptureLayout.StopRecordVideo();
         CameraInterface.getInstance().doDestroyCamera();
-    }
-
-    //对焦框指示器动画
-    private void setFocusViewWidthAnimation(float x, float y) {
-        machine.foucs(x, y, new CameraInterface.FocusCallback() {
-            @Override
-            public void focusSuccess() {
-                mFoucsView.setVisibility(INVISIBLE);
-            }
-        });
-    }
-
-    private void updateVideoViewSize(float videoWidth, float videoHeight) {
-        if (videoWidth > videoHeight) {
-            LayoutParams videoViewParam;
-            int height = (int) ((videoHeight / videoWidth) * getWidth());
-            videoViewParam = new LayoutParams(LayoutParams.MATCH_PARENT, height);
-            videoViewParam.gravity = Gravity.CENTER;
-            mVideoView.setLayoutParams(videoViewParam);
-        }
     }
 
     /**************************************************
@@ -266,11 +260,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
             case TYPE_VIDEO:
                 mVideoView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
                 machine.start(mVideoView.getHolder(), screenProp);
-                /*
-                * 删除超出数量的视频文件
-                * */
 
-                deleteOldVideoFile();
                 break;
             case TYPE_DEFAULT:
                 mVideoView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
@@ -302,17 +292,6 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
         LogUtil.i("startPreviewCallback");
         handlerFoucs(mFoucsView.getWidth() / 2, mFoucsView.getHeight() / 2);
 
-        System.gc();
-
-        //操作UI
-        Handler mainHandler = new Handler(Looper.getMainLooper());
-        mainHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                //一开始就录像
-                mCaptureLayout.StartRecordVideo();
-            }
-        });
     }
 
     @Override

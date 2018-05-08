@@ -47,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
         getPermissions();
 
 
-        //打开UART1串口
-        if(SerialMagr.initSerialPort("/dev/ttyS0",9600))
+        //打开UART1串口,需要chmod 777 /dev/ttyS0
+        if(SerialMagr.initSerialPort("/dev/ttyS0",115200))
         {
             new Thread(SerialMagr.recvThread).start();
             Toast.makeText(this, "串口打开成功", Toast.LENGTH_LONG).show();
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             //////////////////////////////////////////////////
             // 添加一个Timer，可以让程序运行起来了
             Timer tim = new Timer();
-            tim.schedule(taskClock, 0, 2000); //2000ms执行一次
+            tim.schedule(taskClock, 0, 10000);
         }
         else
         {
