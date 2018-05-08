@@ -89,13 +89,13 @@
     <TextView
         android:id="@+id/textView4"
         android:layout_width="240dp"
-        android:layout_height="87dp"
+        android:layout_height="74dp"
         android:layout_marginStart="158dp"
         android:fontFamily="sans-serif"
         android:text="00:00"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
-        android:textSize="70sp"
+        android:textSize="60sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintStart_toStartOf="parent" />

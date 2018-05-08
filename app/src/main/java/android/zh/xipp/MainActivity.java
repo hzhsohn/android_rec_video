@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //打开UART1串口,需要chmod 777 /dev/ttyS0
+        //如果没有提权会阻塞
         if(SerialMagr.initSerialPort("/dev/ttyS0",115200))
         {
             new Thread(SerialMagr.recvThread).start();

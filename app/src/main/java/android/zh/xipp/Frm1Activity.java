@@ -28,6 +28,13 @@ public class Frm1Activity extends AppCompatActivity {
     //
     private JCameraView jCameraView;
 
+    //显示时间
+    Calendar ctime = null;//可以对每个时间域单独修改
+    //
+    TextView tim1=null;
+    TextView tim2=null;
+    ImageView imgv=null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,30 +62,32 @@ public class Frm1Activity extends AppCompatActivity {
         // 添加一个Timer，可以让程序运行起来了
         Timer tim = new Timer();
         tim.schedule(taskClock, 0, 1000); //1000ms执行一次
+        //
+        tim1=((TextView)findViewById(R.id.textView));
+        tim2=((TextView)findViewById(R.id.textView4));
+        imgv=(ImageView)findViewById(R.id.imageView);
     }
 
 
     private TimerTask taskClock = new TimerTask() {
         public void run() {
-            final ImageView imgv=(ImageView)findViewById(R.id.imageView);
             //操作UI
             Handler mainHandler = new Handler(Looper.getMainLooper());
             mainHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    //显示时间
-                    Calendar c = Calendar.getInstance();//可以对每个时间域单独修改
-                    int year = c.get(Calendar.YEAR);
-                    int month = c.get(Calendar.MONTH);
-                    int date = c.get(Calendar.DATE);
-                    int hour = c.get(Calendar.HOUR_OF_DAY);
-                    int minute = c.get(Calendar.MINUTE);
-                    int second = c.get(Calendar.SECOND);
+                    ctime = Calendar.getInstance();
+                    int year = ctime.get(Calendar.YEAR);
+                    int month = ctime.get(Calendar.MONTH);
+                    int date = ctime.get(Calendar.DATE);
+                    int hour = ctime.get(Calendar.HOUR_OF_DAY);
+                    int minute = ctime.get(Calendar.MINUTE);
+                    int second = ctime.get(Calendar.SECOND);
                     System.out.println(year + "/" + month + "/" + date + " " +hour + ":" +minute + ":" + second);
-                    ((TextView)findViewById(R.id.textView)).setText(year + "/" + month + "/" + date );
-                    ((TextView)findViewById(R.id.textView4)).setText(hour + ":" +minute + ":" + second);
-                    c.clear();
-                    c=null;
+                    tim1.setText(year + "/" + month + "/" + date );
+                    tim2.setText(hour + ":" +minute + ":" + second);
+                    ctime.clear();
+                    ctime=null;
 
                     //显示小心跳
                     if(imgv.getVisibility()==View.VISIBLE)

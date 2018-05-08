@@ -68,7 +68,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     public static final int MEDIA_QUALITY_SORRY = 1 * 80000;
 
     //保留文件的数量
-    public final static int save_files_count=10000;
+    public final static int save_files_count=5000;
 
     public static final int BUTTON_STATE_ONLY_CAPTURE = 0x101;      //只能拍照
     public static final int BUTTON_STATE_ONLY_RECORDER = 0x102;     //只能录像

@@ -35,7 +35,7 @@ public class CaptureButton extends View {
     private int outside_color = 0xEEDCDCDC;             //外圆背景色
     private int inside_color = 0xFFFFFFFF;              //内圆背景色
 
-    private int RecordTime = 10 * 1000;              //默认最长录制时间为10s
+    private int RecordTime = 30 * 1000;              //默认最长录制时间为30s
 
 
     private float event_Y;  //Touch_Event_Down时候记录的Y值
