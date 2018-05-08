@@ -5,12 +5,12 @@ apply plugin: 'com.jfrog.bintray'
 version = "1.1.8"
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 27
     buildToolsVersion '27.0.3'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
     }
@@ -23,12 +23,13 @@ android {
     lintOptions {
         abortOnError false
     }
+
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
-    implementation('com.android.support:appcompat-v7:25.3.0') { exclude module: 'support-v4' }
+    implementation 'com.android.support:appcompat-v7:27.1.1'
 }
 def siteUrl = 'https://github.com/CJT2325/CameraView'   // 项目的主页
 def gitUrl = 'https://github.com/CJT2325/CameraView.git'   // Git仓库的url

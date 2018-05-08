@@ -6,12 +6,22 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.zh.uart_serial.SerialMagr;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -38,29 +48,44 @@ public class MainActivity extends AppCompatActivity {
 
 
         //打开UART1串口
-        if(SerialMagr.initSerialPort("/dev/ttyS0",115200))
+        if(SerialMagr.initSerialPort("/dev/ttyS0",9600))
         {
             new Thread(SerialMagr.recvThread).start();
             Toast.makeText(this, "串口打开成功", Toast.LENGTH_LONG).show();
+
+            //////////////////////////////////////////////////
+            // 添加一个Timer，可以让程序运行起来了
+            Timer tim = new Timer();
+            tim.schedule(taskClock, 0, 2000); //2000ms执行一次
         }
         else
         {
             Toast.makeText(this, "串口打开失败", Toast.LENGTH_LONG).show();
         }
 
-        //串口发送数据
-        if(SerialMagr.sendSerialData(new String("xipp - fuck - you!!").getBytes()) >0) {
-             Toast.makeText(getApplicationContext(), "serial send ok!",
-                Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-              Toast.makeText(getApplicationContext(), "serial send fail..",
-                Toast.LENGTH_SHORT).show();
-        }
-
-
     }
+
+    private TimerTask taskClock = new TimerTask() {
+        public void run() {
+            //操作UI
+            Handler mainHandler = new Handler(Looper.getMainLooper());
+            mainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    //串口发送数据
+                    if(SerialMagr.sendSerialData(new String("xipp - fuck - you!!").getBytes()) >0) {
+                        Toast.makeText(getApplicationContext(), "serial send ok!",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(), "serial send fail..",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    };
 
     /**
      * 获取权限

@@ -18,6 +18,7 @@ import com.cjt2325.cameralibrary.listener.ErrorListener;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -59,20 +60,27 @@ public class Frm1Activity extends AppCompatActivity {
 
     private TimerTask taskClock = new TimerTask() {
         public void run() {
+            final ImageView imgv=(ImageView)findViewById(R.id.imageView);
             //操作UI
             Handler mainHandler = new Handler(Looper.getMainLooper());
             mainHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    //已在主线程中，可以更新UI
-                    Date day=new Date();
-                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                    //SimpleDateFormat df2 = new SimpleDateFormat("HH:mm:ss");
-                    SimpleDateFormat df2 = new SimpleDateFormat("HH:mm");
-                    ((TextView)findViewById(R.id.textView)).setText(df.format(day));
-                    ((TextView)findViewById(R.id.textView4)).setText(df2.format(day));
+                    //显示时间
+                    Calendar c = Calendar.getInstance();//可以对每个时间域单独修改
+                    int year = c.get(Calendar.YEAR);
+                    int month = c.get(Calendar.MONTH);
+                    int date = c.get(Calendar.DATE);
+                    int hour = c.get(Calendar.HOUR_OF_DAY);
+                    int minute = c.get(Calendar.MINUTE);
+                    int second = c.get(Calendar.SECOND);
+                    System.out.println(year + "/" + month + "/" + date + " " +hour + ":" +minute + ":" + second);
+                    ((TextView)findViewById(R.id.textView)).setText(year + "/" + month + "/" + date );
+                    ((TextView)findViewById(R.id.textView4)).setText(hour + ":" +minute + ":" + second);
+                    c.clear();
+                    c=null;
+
                     //显示小心跳
-                    ImageView imgv=(ImageView)findViewById(R.id.imageView);
                     if(imgv.getVisibility()==View.VISIBLE)
                     {
                         imgv.setVisibility(View.INVISIBLE);

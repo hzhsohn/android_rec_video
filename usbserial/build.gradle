@@ -10,7 +10,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 14
         targetSdkVersion 27
         archivesBaseName = "${project.name}-${project.VERSION_NAME}"
     }

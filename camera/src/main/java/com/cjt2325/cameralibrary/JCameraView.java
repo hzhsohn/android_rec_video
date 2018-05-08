@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -149,13 +150,6 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
                 }
             }
         });
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //一开始就录像
-                mCaptureLayout.StartRecordVideo();
-            }
-        },4000);
     }
 
     @Override
@@ -209,51 +203,6 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     public void surfaceDestroyed(SurfaceHolder holder) {
         LogUtil.i("JCameraView SurfaceDestroyed");
         CameraInterface.getInstance().doDestroyCamera();
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                if (event.getPointerCount() == 1) {
-                    //显示对焦指示器
-                    setFocusViewWidthAnimation(event.getX(), event.getY());
-                }
-                if (event.getPointerCount() == 2) {
-                    Log.i("CJT", "ACTION_DOWN = " + 2);
-                }
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if (event.getPointerCount() == 1) {
-                    firstTouch = true;
-                }
-                if (event.getPointerCount() == 2) {
-                    //第一个点
-                    float point_1_X = event.getX(0);
-                    float point_1_Y = event.getY(0);
-                    //第二个点
-                    float point_2_X = event.getX(1);
-                    float point_2_Y = event.getY(1);
-
-                    float result = (float) Math.sqrt(Math.pow(point_1_X - point_2_X, 2) + Math.pow(point_1_Y -
-                            point_2_Y, 2));
-
-                    if (firstTouch) {
-                        firstTouchLength = result;
-                        firstTouch = false;
-                    }
-                    if ((int) (result - firstTouchLength) / zoomGradient != 0) {
-                        firstTouch = true;
-                        machine.zoom(result - firstTouchLength, CameraInterface.TYPE_CAPTURE);
-                    }
-//                  Log.i("CJT", "result = " + (result - firstTouchLength));
-                }
-                break;
-            case MotionEvent.ACTION_UP:
-                firstTouch = true;
-                break;
-        }
-        return true;
     }
 
     //对焦框指示器动画
@@ -352,6 +301,18 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     public void startPreviewCallback() {
         LogUtil.i("startPreviewCallback");
         handlerFoucs(mFoucsView.getWidth() / 2, mFoucsView.getHeight() / 2);
+
+        System.gc();
+
+        //操作UI
+        Handler mainHandler = new Handler(Looper.getMainLooper());
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                //一开始就录像
+                mCaptureLayout.StartRecordVideo();
+            }
+        });
     }
 
     @Override

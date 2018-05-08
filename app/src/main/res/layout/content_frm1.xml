@@ -79,7 +79,7 @@
         android:layout_height="41dp"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="72dp"
-        android:text="ID:XXXXXXX"
+        android:text="ID:000000001"
         android:textAlignment="textEnd"
         android:textColor="@color/colorAccent"
         android:textSize="24sp"

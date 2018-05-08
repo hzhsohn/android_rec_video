@@ -263,6 +263,7 @@ public class CameraInterface implements Camera.PreviewCallback {
     /*每一帧的图像*/
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
+
     }
 
     public void setFlashMode(String flashMode) {
