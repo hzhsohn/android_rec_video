@@ -6,11 +6,6 @@ import android.content.BroadcastReceiver;
         import android.util.Log;
 import android.zh.xipp.MainActivity;
 
-/**
- * @author 编写人： xiaox
- * @date 创建时间： 2016/8/20
- * @Description 功能描述： 该类用来实现该app开机自动运行
- */
 public class AppStart extends BroadcastReceiver {
 
     /**
