@@ -12,10 +12,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.zh.uart_serial.SerialListener;
 import android.zh.uart_serial.SerialMagr;
 
 import java.text.SimpleDateFormat;
@@ -27,6 +29,7 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
 
     private final int GET_PERMISSION_REQUEST = 100; //权限申请自定义码
+    private SerialMagr uart=null;
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -46,25 +49,30 @@ public class MainActivity extends AppCompatActivity {
         //做其它界面初始化
         getPermissions();
 
-
         //打开UART1串口,需要chmod 777 /dev/ttyS0
+        uart=new SerialMagr(uartRecv);
         //如果没有提权会阻塞
-        if(SerialMagr.initSerialPort("/dev/ttyS0",115200))
+        if(uart.initSerialPort("/dev/ttyS0",115200))
         {
-            new Thread(SerialMagr.recvThread).start();
             Toast.makeText(this, "串口打开成功", Toast.LENGTH_LONG).show();
 
             //////////////////////////////////////////////////
             // 添加一个Timer，可以让程序运行起来了
             Timer tim = new Timer();
-            tim.schedule(taskClock, 0, 10000);
+            tim.schedule(taskClock, 0, 5000);
         }
         else
         {
             Toast.makeText(this, "串口打开失败", Toast.LENGTH_LONG).show();
         }
-
     }
+
+    SerialListener uartRecv=new SerialListener() {
+        @Override
+        public void uartRecvEvent(byte[] buf) {
+            Log.d("UART","Recv len="+buf.length +" buf="+new String(buf));
+        }
+    };
 
     private TimerTask taskClock = new TimerTask() {
         public void run() {
@@ -73,8 +81,9 @@ public class MainActivity extends AppCompatActivity {
             mainHandler.post(new Runnable() {
                 @Override
                 public void run() {
+
                     //串口发送数据
-                    if(SerialMagr.sendSerialData(new String("xipp - fuck - you!!").getBytes()) >0) {
+                    if(uart.sendSerialData(new String("xipp - fuck - you!!").getBytes()) >0) {
                         Toast.makeText(getApplicationContext(), "serial send ok!",
                                 Toast.LENGTH_SHORT).show();
                     }
