@@ -28,7 +28,7 @@ public class ProcessMonitorService extends Service {
 		@Override
 		public void run() {
 			//延时
-			handler.postDelayed(mRunnable, 100);
+			handler.postDelayed(mRunnable, 1000);
 			//录像
 
 		}
@@ -62,8 +62,8 @@ public class ProcessMonitorService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		//1秒激活一次线程
-		long triggerAtTime = SystemClock.elapsedRealtime()+1000;
+		//30秒激活一次线程
+		long triggerAtTime = SystemClock.elapsedRealtime()+30000;
 		Intent i = new Intent(mContext,AlarmReceiver.class);
 		pi = PendingIntent.getBroadcast(this,0,i,0);
 		manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,triggerAtTime,pi);

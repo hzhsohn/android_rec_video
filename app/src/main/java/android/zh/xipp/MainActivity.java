@@ -17,8 +17,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.zh.service.ProcessMonitorService;
 import android.zh.uart_serial.SerialListener;
 import android.zh.uart_serial.SerialMagr;
+import android.zh.usb_serial.USBSerial;
+import android.zh.usb_serial.USBTTL_Listener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private final int GET_PERMISSION_REQUEST = 100; //权限申请自定义码
     private SerialMagr uart=null;
+    private USBSerial usbuart=null;
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -42,13 +46,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         MainActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
-        //启用服务
-       // Intent intent = new Intent(MainActivity.this,ProcessMonitorService.class);
-       // startService(intent) ;
+        //启用后台服务
+        //Intent intent = new Intent(MainActivity.this,ProcessMonitorService.class);
+        //startService(intent) ;
 
         //做其它界面初始化
         getPermissions();
-
+/*
         //打开UART1串口,需要chmod 777 /dev/ttyS0
         uart=new SerialMagr(uartRecv);
         //如果没有提权会阻塞
@@ -56,21 +60,34 @@ public class MainActivity extends AppCompatActivity {
         {
             Toast.makeText(this, "串口打开成功", Toast.LENGTH_LONG).show();
 
-            //////////////////////////////////////////////////
-            // 添加一个Timer，可以让程序运行起来了
-            Timer tim = new Timer();
-            tim.schedule(taskClock, 0, 5000);
         }
         else
         {
             Toast.makeText(this, "串口打开失败", Toast.LENGTH_LONG).show();
         }
+*/
+        //打开USBSerial
+        usbuart=new USBSerial();
+        usbuart.initUSB_TTL(this,9600,usbttl);
+
+        //
+        //////////////////////////////////////////////////
+        // 添加一个Timer，可以让发送运行起来了
+        Timer tim = new Timer();
+        tim.schedule(taskClock, 5000, 10000);
     }
+
+    USBTTL_Listener usbttl=new USBTTL_Listener() {
+        @Override
+        public void usbUartRecvEvent(byte[] buf) {
+            Log.d("MainActivity USB-TTL","Recv len="+buf.length +" buf="+new String(buf));
+        }
+    };
 
     SerialListener uartRecv=new SerialListener() {
         @Override
         public void uartRecvEvent(byte[] buf) {
-            Log.d("UART","Recv len="+buf.length +" buf="+new String(buf));
+            Log.d("MainActivity UART","Recv len="+buf.length +" buf="+new String(buf));
         }
     };
 
@@ -82,16 +99,30 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
 
-                    //串口发送数据
-                    if(uart.sendSerialData(new String("xipp - fuck - you!!").getBytes()) >0) {
-                        Toast.makeText(getApplicationContext(), "serial send ok!",
-                                Toast.LENGTH_SHORT).show();
+                    if(uart!=null) {
+                        //串口发送数据
+                        int ret=uart.sendSerialData(new String("xipp - fuck - you!!").getBytes());
+                        if (ret > 0) {
+                            Log.i("serial", "send size=" + ret);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "serial send fail..",
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
-                    else
-                    {
-                        Toast.makeText(getApplicationContext(), "serial send fail..",
-                                Toast.LENGTH_SHORT).show();
+                    if(usbuart!=null) {
+                        //usb串口发送
+                        int ret= usbuart.sendData(new String("xipp - fuck - you2!!").getBytes());
+                        if(ret>0)
+                        {
+                            Log.i("usbserial", "send size=" + ret);
+                        }
+                        else
+                        {
+                            Toast.makeText(getApplicationContext(), "usbserial send fail..",
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
+
                 }
             });
         }

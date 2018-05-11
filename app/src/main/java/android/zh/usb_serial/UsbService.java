@@ -191,7 +191,11 @@ public class UsbService extends Service {
                 int deviceVID = device.getVendorId();
                 int devicePID = device.getProductId();
 
-                if (deviceVID != 0x1d6b && (devicePID != 0x0001 && devicePID != 0x0002 && devicePID != 0x0003)) {
+                //这里是初始化调用的硬件
+                //PL2303-----deviceVID == 1659 && devicePID==8963
+                //CH34x------deviceVID == 6790 && devicePID==29987
+                if ((deviceVID == 1659 && devicePID==8963) ||
+                        (deviceVID == 6790 && devicePID==29987)) {
                     // There is a device connected to our Android device. Try to open it as a Serial Port.
                     requestUserPermission();
                     keep = false;
@@ -203,6 +207,7 @@ public class UsbService extends Service {
                 if (!keep)
                     break;
             }
+
             if (!keep) {
                 // There is no USB devices connected (but usb host were listed). Send an intent to MainActivity.
                 Intent intent = new Intent(ACTION_NO_USB);

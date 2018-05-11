@@ -8,9 +8,6 @@ import android.zh.xipp.MainActivity;
 
 public class AppStart extends BroadcastReceiver {
 
-    /**
-     * demo2: 可以实现开机自动打开软件并运行。
-     */
     @Override
     public void onReceive(Context context, Intent intent) {
 

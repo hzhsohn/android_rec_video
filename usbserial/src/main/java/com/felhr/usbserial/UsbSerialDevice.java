@@ -13,6 +13,7 @@ import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbEndpoint;
 import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbRequest;
+import android.util.Log;
 
 public abstract class UsbSerialDevice implements UsbSerialInterface
 {
@@ -67,6 +68,8 @@ public abstract class UsbSerialDevice implements UsbSerialInterface
 		 */
         int vid = device.getVendorId();
         int pid = device.getProductId();
+
+        Log.i("USB TYPE","vid="+vid+"   pid="+pid);
 
         if(FTDISioIds.isDeviceSupported(vid, pid))
             return new FTDISerialDevice(device, connection, iface);
